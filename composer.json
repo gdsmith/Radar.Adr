@@ -5,15 +5,16 @@
     "homepage": "https://github.com/radarphp/Radar.Adr",
     "license": "MIT",
     "require": {
-        "aura/di": "~3.0",
         "aura/payload": "~3.0",
-        "aura/router": "~3.0",
         "relay/relay": "~1.0",
         "relay/middleware": "~1.0",
-        "arbiter/arbiter": "~1.0"
+        "arbiter/arbiter": "~1.0",
+        "rdlowrey/auryn": "^1.4",
+        "aura/router": "^3.1"
     },
     "require-dev": {
-        "zendframework/zend-diactoros": "~1.0"
+        "zendframework/zend-diactoros": "~1.0",
+        "phpunit/phpunit": "^5.7"
     },
     "autoload": {
         "psr-4": {

@@ -3,6 +3,7 @@ namespace Radar\Adr\Handler;
 
 use Arbiter\Action;
 use Aura\Di\ContainerBuilder;
+use Auryn\Injector;
 use Radar\Adr\Resolver;
 use Radar\Adr\Route;
 use Zend\Diactoros\Response;
@@ -14,10 +15,8 @@ class ActionHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $builder = new ContainerBuilder();
-        $di = $builder->newInstance();
         $this->actionHandler = new ActionHandler(
-            new Resolver($di->getInjectionFactory())
+            new Resolver(new Injector())
         );
     }
 

@@ -8,8 +8,9 @@
  */
 namespace Radar\Adr;
 
-use Aura\Di\Container;
-use Aura\Di\ContainerBuilder;
+use Auryn\Injector;
+use Radar\Adr\Configuration\ConfigurationSet;
+use Radar\Adr\Configuration\RadarConfiguration;
 
 /**
  *
@@ -61,7 +62,7 @@ class Boot
             $di = $this->newContainer($config, $autoResolve);
         }
 
-        return $di->get('radar/adr:adr');
+        return $di->make(Adr::class);
     }
 
     /**
@@ -96,12 +97,13 @@ class Boot
      *
      * @param bool $autoResolve Use the auto-resolving DI container?
      *
-     * @return Container
+     * @return Injector
      *
      */
     protected function newContainer(array $config, $autoResolve = false)
     {
-        $config = array_merge(['Radar\Adr\Config'], $config);
-        return (new ContainerBuilder())->newConfiguredInstance($config, $autoResolve);
+        $di = new Injector();
+        (new ConfigurationSet(array_merge([new RadarConfiguration], $config)))->configure($di);
+        return $di;
     }
 }

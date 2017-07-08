@@ -3,6 +3,7 @@ namespace Radar\Adr;
 
 use Aura\Di\ContainerBuilder;
 use Aura\Router\Rule\RuleIterator;
+use Auryn\Injector;
 use Radar\Adr\Fake\FakeMiddleware;
 use Radar\Adr\Route;
 use Relay\RelayBuilder;
@@ -12,14 +13,15 @@ use Zend\Diactoros\ServerRequestFactory;
 class AdrTest extends \PHPUnit_Framework_TestCase
 {
     protected $adr;
+    protected $fakeMap;
+    protected $fakeRules;
+    protected $relayBuilder;
 
     public function setUp()
     {
-        $builder = new ContainerBuilder();
-        $di = $builder->newInstance();
-        $resolver = new Resolver($di->getInjectionFactory());
+        $resolver = new Resolver(new Injector());
 
-        $this->fakeMap = new Fake\FakeMap(new Route());
+        $this->fakeMap = new Fake\FakeMap($resolver(Route::class));
         $this->fakeRules = new RuleIterator();
         $this->relayBuilder = new RelayBuilder($resolver);
 

@@ -8,7 +8,7 @@
  */
 namespace Radar\Adr;
 
-use Aura\Di\Injection\InjectionFactory;
+use Auryn\Injector;
 
 /**
  *
@@ -26,7 +26,7 @@ class Resolver
      * @var InjectionFactory
      *
      */
-    protected $injectionFactory;
+    protected $di;
 
     /**
      *
@@ -36,9 +36,9 @@ class Resolver
      * DI container.
      *
      */
-    public function __construct(InjectionFactory $injectionFactory)
+    public function __construct(Injector $di)
     {
-        $this->injectionFactory = $injectionFactory;
+        $this->di = $di;
     }
 
     /**
@@ -53,11 +53,11 @@ class Resolver
     public function __invoke($spec)
     {
         if (is_string($spec)) {
-            return $this->injectionFactory->newInstance($spec);
+            return $this->di->make($spec);
         }
 
         if (is_array($spec) && is_string($spec[0])) {
-            $spec[0] = $this->injectionFactory->newInstance($spec[0]);
+            $spec[0] = $this->di->make($spec[0]);
         }
 
         return $spec;

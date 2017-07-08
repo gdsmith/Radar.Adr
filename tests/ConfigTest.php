@@ -1,34 +1,42 @@
 <?php
 namespace Radar\Adr;
 
-use Aura\Di\AbstractContainerConfigTest;
+use Aura\Router\RouterContainer;
+use Auryn\Injector;
+use Radar\Adr\Configuration\RadarConfiguration;
+use Radar\Adr\Handler\ActionHandler;
+use Radar\Adr\Handler\RoutingHandler;
 
-class ConfigTest extends AbstractContainerConfigTest
+class ConfigTest extends \PHPUnit_Framework_TestCase
 {
-    protected function getConfigClasses()
+    /**
+     * @var Injector
+     */
+    private $di;
+
+    protected function setUp()
     {
-        return [
-            'Radar\Adr\Config',
-        ];
+        $this->di = new Injector;
+
     }
 
-    public function provideGet()
+    public function testConfiguration()
     {
-        return [
-            ['radar/adr:adr', 'Radar\Adr\Adr'],
-            ['radar/adr:resolver', 'Radar\Adr\Resolver'],
-            ['radar/adr:router', 'Aura\Router\RouterContainer'],
-        ];
+        $configuration = new RadarConfiguration();
+        $configuration->configure($this->di);
+        return $this->checkConfiguration([
+            Adr::class,
+            Resolver::class,
+            RouterContainer::class,
+            ActionHandler::class,
+            RoutingHandler::class,
+        ]);
     }
 
-    public function provideNewInstance()
+    private function checkConfiguration(array $classes)
     {
-        return [
-            ['Aura\Router\RouterContainer'],
-            ['Radar\Adr\Adr'],
-            ['Radar\Adr\Handler\ActionHandler'],
-            ['Radar\Adr\Handler\RoutingHandler'],
-            ['Radar\Adr\Resolver'],
-        ];
+        foreach ($classes as $class) {
+            $this->assertInstanceOf($class, $this->di->make($class));
+        }
     }
 }
