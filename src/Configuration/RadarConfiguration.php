@@ -13,7 +13,9 @@ use Aura\Router\Matcher;
 use Aura\Router\RouterContainer;
 use Aura\Router\Rule\RuleIterator;
 use Auryn\Injector;
+use Radar\Adr\Resolver;
 use Radar\Adr\Route;
+use Relay\RelayBuilder;
 
 /**
  *
@@ -49,6 +51,13 @@ class RadarConfiguration implements Configuration
          */
         $di->delegate(Map::class, [$this, 'delegateMap']);
         $di->delegate(RuleIterator::class, [$this, 'delegateRuleIterator']);
+
+        /**
+         * Relay\RelayBuilder
+         */
+        $di->define(RelayBuilder::class, [
+            'resolver' => Resolver::class
+        ]);
 
         /**
          * Radar\Adr\Handler\RoutingHandler
