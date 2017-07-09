@@ -3,6 +3,8 @@ namespace Radar\Adr;
 
 use Aura\Router\RouterContainer;
 use Auryn\Injector;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Radar\Adr\Configuration\RadarConfiguration;
 use Radar\Adr\Handler\ActionHandler;
 use Radar\Adr\Handler\RoutingHandler;
@@ -17,7 +19,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->di = new Injector;
-
+        $this->di->alias(LoggerInterface::class, NullLogger::class);
     }
 
     public function testConfiguration()

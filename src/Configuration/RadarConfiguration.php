@@ -13,6 +13,7 @@ use Aura\Router\Matcher;
 use Aura\Router\RouterContainer;
 use Aura\Router\Rule\RuleIterator;
 use Auryn\Injector;
+use Psr\Log\LoggerInterface;
 use Radar\Adr\Resolver;
 use Radar\Adr\Route;
 use Relay\RelayBuilder;
@@ -89,6 +90,8 @@ class RadarConfiguration implements Configuration
     public function prepareRouterContainer(RouterContainer $routerContainer, Injector $di)
     {
         $routerContainer->setRouteFactory($di->buildExecutable([$this, 'makeRoute']));
+        $routerContainer->setLoggerFactory($di->buildExecutable([$this, 'makeLogger']));
+        $routerContainer->setMapFactory($di->buildExecutable([$this, 'makeMap']));
     }
 
     /**
@@ -97,5 +100,21 @@ class RadarConfiguration implements Configuration
     public function makeRoute(Injector $di)
     {
         $di->make(Route::class);
+    }
+
+    /**
+     * @param Injector $di
+     */
+    public function makeLogger(Injector $di)
+    {
+        $di->make(LoggerInterface::class);
+    }
+
+    /**
+     * @param Injector $di
+     */
+    public function makeMap(Injector $di)
+    {
+        $di->make(Map::class);
     }
 }
