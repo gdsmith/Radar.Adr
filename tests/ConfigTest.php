@@ -23,7 +23,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testConfiguration()
     {
         $configuration = new RadarConfiguration();
-        $configuration->configure($this->di);
+        $configuration->apply($this->di);
         return $this->checkConfiguration([
             Adr::class,
             Resolver::class,

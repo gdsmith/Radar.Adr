@@ -74,7 +74,7 @@ class Boot
      *
      * @param bool $autoResolve Use the auto-resolving DI container?
      *
-     * @return Container
+     * @return Injector
      *
      */
     protected function cachedContainer(array $config, $autoResolve = false)
@@ -103,7 +103,7 @@ class Boot
     protected function newContainer(array $config, $autoResolve = false)
     {
         $di = new Injector();
-        (new ConfigurationSet(array_merge([new RadarConfiguration], $config)))->configure($di);
+        (new ConfigurationSet(array_merge([RadarConfiguration::class], $config)))->apply($di);
         return $di;
     }
 }

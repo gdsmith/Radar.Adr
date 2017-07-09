@@ -11,15 +11,26 @@ class ConfigurationSet implements Configuration
      */
     private $configurations;
 
+    /**
+     * ConfigurationSet constructor.
+     * @param array $configurations
+     */
     public function __construct(array $configurations)
     {
         $this->configurations = $configurations;
     }
 
-    public function configure(Injector $di)
+    /**
+     * @inheritdoc
+     */
+    public function apply(Injector $di)
     {
         foreach ($this->configurations as $configuration) {
-            $configuration->configure($di);
+            if (is_string($configuration) AND class_exists($configuration))
+            {
+                $configuration = $di->make($configuration);
+            }
+            $configuration->apply($di);
         }
     }
 }

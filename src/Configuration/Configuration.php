@@ -6,5 +6,9 @@ use Auryn\Injector;
  */
 interface Configuration
 {
-    public function configure(Injector $di);
+    /**
+     * @param Injector $di
+     * @return null
+     */
+    public function apply(Injector $di);
 }

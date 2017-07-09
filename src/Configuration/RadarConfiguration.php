@@ -27,19 +27,10 @@ use Relay\RelayBuilder;
 class RadarConfiguration implements Configuration
 {
     /**
-     * @var Injector
+     * @inheritdoc
      */
-    private $di;
-    /**
-     *
-     * Defines params, setters, values, etc. in the Container.
-     *
-     * @param Container $di The DI container.
-     *
-     */
-    public function configure(Injector $di)
+    public function apply(Injector $di)
     {
-        $this->di = $di;
         /**
          * Aura\Router\Container
          */
@@ -85,7 +76,7 @@ class RadarConfiguration implements Configuration
 
     /**
      * @param Injector $di
-     * @return \Aura\Router\RuleIterator
+     * @return Matcher
      */
     public function delegateMatcher(Injector $di)
     {
@@ -94,18 +85,17 @@ class RadarConfiguration implements Configuration
 
     /**
      * @param Injector $di
-     * @return \Aura\Router\RuleIterator
      */
     public function prepareRouterContainer(RouterContainer $routerContainer, Injector $di)
     {
-        $routerContainer->setRouteFactory([$this, 'makeRoute']);
+        $routerContainer->setRouteFactory($di->buildExecutable([$this, 'makeRoute']));
     }
 
     /**
      * @param Injector $di
      */
-    public function makeRoute()
+    public function makeRoute(Injector $di)
     {
-        $$this->di->make(Route::class);
+        $di->make(Route::class);
     }
 }
