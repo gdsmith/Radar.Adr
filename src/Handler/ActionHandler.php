@@ -21,6 +21,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class ActionHandler extends Arbiter
 {
+
     /**
      *
      * Dispatches to the Action stored in the `radar/adr:action` Request

@@ -14,9 +14,11 @@ use Aura\Router\RouterContainer;
 use Aura\Router\Rule\RuleIterator;
 use Auryn\Injector;
 use Psr\Log\LoggerInterface;
+use Radar\Adr\Handler\ActionHandler;
 use Radar\Adr\Resolver;
 use Radar\Adr\Route;
 use Relay\RelayBuilder;
+use Relay\ResolverInterface;
 
 /**
  *
@@ -28,10 +30,20 @@ use Relay\RelayBuilder;
 class RadarConfiguration implements Configuration
 {
     /**
+     * @var Injector
+     */
+    protected $di;
+    /**
      * @inheritdoc
      */
     public function apply(Injector $di)
     {
+        $this->di = $di;
+        if( ! count($di->inspect(LoggerInterface::class, Injector::I_ALIASES)[Injector::I_ALIASES]))
+        {
+            $di->alias(LoggerInterface::class, NullLogger::class);
+        }
+
         /**
          * Aura\Router\Container
          */
@@ -47,9 +59,9 @@ class RadarConfiguration implements Configuration
         /**
          * Relay\RelayBuilder
          */
-        $di->define(RelayBuilder::class, [
-            'resolver' => Resolver::class
-        ]);
+        $di->alias(ResolverInterface::class, Resolver::class);
+        $di->share(ResolverInterface::class);
+        $di->defineParam('resolver', $di->make(ResolverInterface::class));
 
         /**
          * Radar\Adr\Handler\RoutingHandler
@@ -91,30 +103,30 @@ class RadarConfiguration implements Configuration
     {
         $routerContainer->setRouteFactory($di->buildExecutable([$this, 'makeRoute']));
         $routerContainer->setLoggerFactory($di->buildExecutable([$this, 'makeLogger']));
-        $routerContainer->setMapFactory($di->buildExecutable([$this, 'makeMap']));
+//        $routerContainer->setMapFactory($di->buildExecutable([$this, 'makeMap']));
     }
 
     /**
      * @param Injector $di
      */
-    public function makeRoute(Injector $di)
+    public function makeRoute()
     {
-        $di->make(Route::class);
+        return $this->di->make(Route::class);
     }
 
     /**
      * @param Injector $di
      */
-    public function makeLogger(Injector $di)
+    public function makeLogger()
     {
-        $di->make(LoggerInterface::class);
+        return $this->di->make(LoggerInterface::class);
     }
 
     /**
      * @param Injector $di
      */
-    public function makeMap(Injector $di)
+    public function makeMap()
     {
-        $di->make(Map::class);
+        return $this->di->make(Map::class);
     }
 }

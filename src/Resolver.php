@@ -9,6 +9,7 @@
 namespace Radar\Adr;
 
 use Auryn\Injector;
+use Relay\ResolverInterface;
 
 /**
  *
@@ -17,7 +18,7 @@ use Auryn\Injector;
  * @package radar/adr
  *
  */
-class Resolver
+class Resolver implements ResolverInterface
 {
     /**
      *

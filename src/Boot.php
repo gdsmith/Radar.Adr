@@ -9,6 +9,7 @@
 namespace Radar\Adr;
 
 use Auryn\Injector;
+use Psr\Log\LoggerInterface;
 use Radar\Adr\Configuration\ConfigurationSet;
 use Radar\Adr\Configuration\RadarConfiguration;
 
@@ -103,7 +104,8 @@ class Boot
     protected function newContainer(array $config, $autoResolve = false)
     {
         $di = new Injector();
-        (new ConfigurationSet(array_merge([RadarConfiguration::class], $config)))->apply($di);
+        $di->share($di);
+        (new ConfigurationSet($config))->apply($di);
         return $di;
     }
 }
